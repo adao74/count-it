@@ -36,7 +36,6 @@ const count = (str) => {
     
     const readingLevel = readability(str, wordCount)
 
-
     let wordObject = {};
 
     for (let i = 0; i < sentenceArray.length; i++) {
@@ -60,6 +59,10 @@ const count = (str) => {
 
         }
         
+    // obj: collect each letter's appearance
+    // wordCount: word count
+    // wordObject: collect each word's appearance
+    // readingLevel: reading level
     return [obj, wordCount, wordObject, readingLevel]
 }
 
