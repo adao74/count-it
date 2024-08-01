@@ -2,6 +2,24 @@
 
 // Output: Letters and how often they show up. - d:1 e:1 h:1 l:3 o:2 r:1 w:1
 
+// ES module => need .mjs extension or set "type": "module" in package.json
+import {syllable} from 'syllable'
+
+// Calculate readability https://www.thoughtco.com/calculating-reading-level-1857103
+const readability = (str, wordCount) => {
+    // Each element in the sentences array is a sentence.
+    // 1) regex expression removes all numbers, including decimals. Removes whitespace so number of sentences won't include empty sentences. 
+    // 2) Put sentences into an array, split based on periods, exclamation points, question marks
+    const sentences = str.replace(/[\d\.]+|\s+/g, '').trim().split(/[.!?]/)
+    const filteredSentences = sentences.filter(element => element !== ""); // rid empty elements
+    const averageNumberWords = wordCount / (filteredSentences.length)
+
+    const score = (averageNumberWords * 0.39) + (syllable(str) * 11.8) - 15.59
+
+    return score
+}
+
+
 const count = (str) => {
     const str2 = str.toLowerCase().replace(/[!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~0-9\s]/g, '') // remove punctuation / special characters, numbers, and all whitespace (spaces, tabs, new lines)
     const obj = {}
@@ -16,6 +34,9 @@ const count = (str) => {
 
     const wordCount = sentenceArray.length
     
+    const readingLevel = readability(str, wordCount)
+
+
     let wordObject = {};
 
     for (let i = 0; i < sentenceArray.length; i++) {
@@ -39,11 +60,11 @@ const count = (str) => {
 
         }
         
-    return [obj, wordCount, wordObject]
+    return [obj, wordCount, wordObject, readingLevel]
 }
 
 
 
 
-console.log(count("   12Andrea    Dao!! "))
+console.log(count("   12Andrea    Dao!! You only live once."))
 console.log(count("The quick brown fox jumps over the lazy dog and the sleeping cat early in the day."))
